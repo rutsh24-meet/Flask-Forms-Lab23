@@ -8,32 +8,38 @@ app = Flask(  # Create a flask app
 )
 
 
-username = "siwarha"
-password = "123"
-facebook_friends=["Loai","Kenda","Avigail", "George", "Fouad", "Gi"]
-friend_exists = ''
 
-@app.route('/', methods=['GET', 'POST'])  # '/' for the default page
+facebook_friends=["Loai","Kenda","Avigail", "George", "Fouad", "Gi"]
+
+accounts = {"siwarha":"123", "rut":"456", "tamar":"789"}
+
+@app.route('/', methods=['GET', 'POST'])
 def login():
-	username = "siwarha"
-	password = "123"
-	if request.method == 'GET':  # Checking for get, if get means not the corect action, return login
-		return render_template('login.html')
-	else:  # If POST, continue
-		user_check = request.form['username']
-		pass_check = request.form['password']
-		if user_check == username and pass_check == password:
-			return render_template('home.html', username = "siwarha", password = "123")
+    if request.method == 'GET':
+        return render_template('login.html')
+    else:
+        user_check = request.form['username']
+        pass_check = request.form['password']
+        for key, value in accounts.items():
+            if key == user_check and value == pass_check:
+                return redirect(url_for('home'))
+        return render_template('login.html')
 
   
 @app.route('/home', methods=['GET', 'POST'])  
 def home():
 	return render_template('home.html', facebook_friends=facebook_friends)
 
+
+def all_lower(my_list):
+    return [i.lower() for i in my_list]
+
+
 @app.route('/friend_exists/<string:name>', methods=['GET', 'POST'])  
 def friend_exists(name):
 	check = False
-	if name in facebook_friends:
+	lower_list = all_lower(facebook_friends)
+	if name.lower() in lower_list:
 		check = True
 	return render_template('friend_exists.html', is_in = check, name_pass = name)
 
