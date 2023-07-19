@@ -13,7 +13,11 @@
 
 </head>
 <body>
-
+  {% if is_in == True %}
+    <h1>True, {{name_pass}} is your friend.</h1>
+  {% else %}
+    <h1>False, {{name_pass}} isn't your friend.</h1>
+  {% endif %}
 
 
 </body>
